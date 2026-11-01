@@ -34,6 +34,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/utkan-kunlar.pdf",
     createdAt: Date.now() - 100000,
     addedBy: "sohibjon",
+    downloads: 12,
   },
   {
     id: "seed-2",
@@ -45,6 +46,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/fizika-9.pdf",
     createdAt: Date.now() - 90000,
     addedBy: "jonibek",
+    downloads: 8,
   },
   {
     id: "seed-3",
@@ -56,6 +58,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/algebra.pdf",
     createdAt: Date.now() - 80000,
     addedBy: "sohibjon",
+    downloads: 15,
   },
   {
     id: "seed-4",
@@ -67,6 +70,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/english-b1.pdf",
     createdAt: Date.now() - 70000,
     addedBy: "jonibek",
+    downloads: 19,
   },
   {
     id: "seed-5",
@@ -78,6 +82,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/adabiyot-tarixi.pdf",
     createdAt: Date.now() - 60000,
     addedBy: "sohibjon",
+    downloads: 6,
   },
   {
     id: "seed-6",
@@ -89,6 +94,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/kimyo-test.pdf",
     createdAt: Date.now() - 50000,
     addedBy: "jonibek",
+    downloads: 11,
   },
   {
     id: "seed-7",
@@ -100,6 +106,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/mehrobxon.pdf",
     createdAt: Date.now() - 40000,
     addedBy: "sohibjon",
+    downloads: 9,
   },
   {
     id: "seed-8",
@@ -111,6 +118,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/biologiya.pdf",
     createdAt: Date.now() - 30000,
     addedBy: "jonibek",
+    downloads: 7,
   },
   {
     id: "seed-9",
@@ -122,6 +130,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/iqtisod.pdf",
     createdAt: Date.now() - 20000,
     addedBy: "sohibjon",
+    downloads: 5,
   },
   {
     id: "seed-10",
@@ -133,6 +142,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/python.pdf",
     createdAt: Date.now() - 10000,
     addedBy: "jonibek",
+    downloads: 21,
   },
   {
     id: "seed-11",
@@ -144,6 +154,7 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/tarix.pdf",
     createdAt: Date.now() - 5000,
     addedBy: "sohibjon",
+    downloads: 4,
   },
   {
     id: "seed-12",
@@ -155,5 +166,6 @@ export const SEED_RESOURCES: Resource[] = [
     link: "https://example.com/mat-dt.pdf",
     createdAt: Date.now(),
     addedBy: "jonibek",
+    downloads: 14,
   },
 ];

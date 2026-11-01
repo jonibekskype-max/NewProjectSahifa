@@ -1,18 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
-import { Library, SearchX } from "lucide-react";
-import type { CategoryId, FeedbackSubmission, Resource, User } from "./types";
+import { ArrowUpDown, CheckCircle2, Library, SearchX } from "lucide-react";
+import type { CategoryId, FeedbackSubmission, Resource, SortOption, User } from "./types";
 import {
+  computeResourceSummary,
   filterResources,
-  loadResources,
-  saveResources,
-  loadUser,
-  saveUser,
+  incrementResourceDownloads,
   loadFeedback,
+  loadReadIds,
+  loadResources,
+  loadUser,
   saveFeedback,
+  saveReadIds,
+  saveResources,
+  saveUser,
+  sortResources,
+  toggleReadResource,
 } from "./lib/storage";
 import { Header } from "./components/Header";
 import { SearchBar } from "./components/SearchBar";
 import { ResourceCard } from "./components/ResourceCard";
+import { ResourceSummaryCard } from "./components/ResourceSummaryCard";
 import { AddResourceModal } from "./components/AddResourceModal";
 import { FeedbackInboxModal } from "./components/FeedbackInboxModal";
 import { FeedbackModal } from "./components/FeedbackModal";
@@ -22,6 +29,8 @@ function App() {
   const [user, setUser] = useState<User | null>(null);
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<CategoryId | "all">("all");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
+  const [readIds, setReadIds] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -32,6 +41,7 @@ function App() {
     setResources(loadResources());
     setUser(loadUser());
     setFeedback(loadFeedback());
+    setReadIds(loadReadIds());
   }, []);
 
   function persist(next: Resource[]) {
@@ -58,19 +68,30 @@ function App() {
     setModalOpen(true);
   }
 
-  function handleAdd(r: Omit<Resource, "id" | "createdAt" | "addedBy">) {
+  function handleAdd(r: Omit<Resource, "id" | "createdAt" | "addedBy" | "downloads">) {
     if (!user) return;
     const newResource: Resource = {
       ...r,
       id: `res-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       createdAt: Date.now(),
       addedBy: user.id,
+      downloads: 0,
     };
     persist([newResource, ...resources]);
   }
 
   function handleDelete(id: string) {
     persist(resources.filter((r) => r.id !== id));
+  }
+
+  function handleDownload(id: string) {
+    persist(incrementResourceDownloads(resources, id));
+  }
+
+  function handleToggleRead(id: string) {
+    const next = toggleReadResource(readIds, id);
+    setReadIds(next);
+    saveReadIds(next);
   }
 
   function handleFeedbackSubmit(name: string, contact: string, message: string): void {
@@ -86,9 +107,19 @@ function App() {
     saveFeedback(nextFeedback);
   }
 
-  const filtered = useMemo(
-    () => filterResources(resources, query, activeCategory),
-    [resources, query, activeCategory]
+  const filtered = useMemo(() => {
+    const matched = filterResources(resources, query, activeCategory);
+    return sortResources(matched, sortBy);
+  }, [resources, query, activeCategory, sortBy]);
+
+  const summary = useMemo(
+    () => computeResourceSummary(resources),
+    [resources]
+  );
+
+  const readCount = useMemo(
+    () => resources.filter((r) => readIds.includes(r.id)).length,
+    [resources, readIds]
   );
 
   return (
@@ -103,20 +134,21 @@ function App() {
       />
 
       {/* Hero */}
-      <section className="border-b border-slate-200 bg-gradient-to-b from-emerald-50/60 to-slate-50 px-4 py-10 sm:px-6 sm:py-14">
+      <section className="border-b border-slate-200 bg-gradient-to-b from-emerald-50/60 to-slate-50 px-4 py-4 sm:px-6 sm:py-5">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
-            <Library className="h-7 w-7" />
+          <div className="inline-flex items-center justify-center gap-2.5">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-xs">
+              <Library className="h-4 w-4" />
+            </div>
+            <h2 className="text-lg font-bold tracking-tight text-slate-800 sm:text-xl">
+              O'zbek kitob va o'quv materiallari kutubxonasi
+            </h2>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">
-            O'zbek kitob va o'quv materiallari kutubxonasi
-          </h2>
-          <p className="mt-2.5 text-sm leading-relaxed text-slate-600 sm:text-base">
+          <p className="mt-1 text-xs text-slate-600 sm:text-sm">
             Darsliklar, badiiy kitoblar, ilmiy maqolalar va testlar — bir joyda.
-            Tez qidiring, yuklab oling va bilmingizni boyiting.
           </p>
         </div>
-        <div className="mt-8">
+        <div className="mt-3.5">
           <SearchBar
             query={query}
             onQueryChange={setQuery}
@@ -127,17 +159,46 @@ function App() {
       </section>
 
       {/* Results */}
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <div className="mb-5 flex items-center justify-between">
-          <p className="text-sm text-slate-500">
-            <span className="font-semibold text-slate-700">{filtered.length}</span>{" "}
-            ta material topildi
-          </p>
-          {user && (
-            <p className="text-xs text-slate-400">
-              Joriy foydalanuvchi: <span className="font-medium text-emerald-700">{user.name}</span>
+      <main className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+        <ResourceSummaryCard summary={summary} />
+
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <p className="text-sm text-slate-500">
+              <span className="font-semibold text-slate-700">{filtered.length}</span>{" "}
+              ta material topildi
             </p>
-          )}
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-800"
+              data-testid="personal-read-progress"
+            >
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+              O'qilgan: {readCount} / {resources.length}
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            {user && (
+              <p className="text-xs text-slate-400">
+                Joriy foydalanuvchi:{" "}
+                <span className="font-medium text-emerald-700">{user.name}</span>
+              </p>
+            )}
+            <label className="inline-flex items-center gap-2 text-xs font-medium text-slate-600">
+              <ArrowUpDown className="h-3.5 w-3.5 text-slate-400" />
+              <span>Saralash:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                aria-label="Materiallarni saralash"
+                data-testid="resource-sort-select"
+                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-2xs outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+              >
+                <option value="newest">Sana bo'yicha (Eng yangilari)</option>
+                <option value="popular">Ommabopligi bo'yicha (Ko'p yuklangan)</option>
+              </select>
+            </label>
+          </div>
         </div>
 
         {filtered.length > 0 ? (
@@ -147,7 +208,10 @@ function App() {
                 key={r.id}
                 resource={r}
                 currentUser={user}
+                isRead={readIds.includes(r.id)}
+                onToggleRead={handleToggleRead}
                 onDelete={handleDelete}
+                onDownload={handleDownload}
               />
             ))}
           </div>

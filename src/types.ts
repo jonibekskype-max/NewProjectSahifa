@@ -4,6 +4,8 @@ export type CategoryId =
   | "maqola"
   | "test";
 
+export type SortOption = "newest" | "popular";
+
 export interface Category {
   id: CategoryId;
   label: string;
@@ -18,6 +20,7 @@ export interface Resource {
   link: string;
   createdAt: number;
   addedBy: string;
+  downloads: number;
 }
 
 export interface User {
@@ -31,4 +34,14 @@ export interface FeedbackSubmission {
   contact: string;
   message: string;
   createdAt: number;
+}
+
+export interface ResourceSummary {
+  books: number;
+  badiiy: number;
+  darslik: number;
+  articles: number;
+  tests: number;
+  totalResources: number;
+  totalDownloads: number;
 }

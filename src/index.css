@@ -2,266 +2,90 @@
 
 .sahifa-logo-shell {
   position: relative;
-  display: inline-block;
-  width: 272px;
-  height: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 196px;
+  height: 52px;
   overflow: visible;
   cursor: pointer;
+  user-select: none;
 }
 
-.sahifa-logo-art,
+.sahifa-logo-static-img,
+.sahifa-logo-video {
+  position: absolute;
+  inset: -12% -6%;
+  width: 112%;
+  height: 124%;
+  object-fit: cover;
+  object-position: center;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.sahifa-logo-static-img {
+  z-index: 1;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 380ms ease,
+    transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sahifa-logo-static-img.is-hidden {
+  opacity: 0;
+}
+
+.sahifa-logo-video {
+  z-index: 2;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 380ms ease-out,
+    transform 750ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sahifa-logo-video.is-playing {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.sahifa-logo-video.is-fading-out {
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .sahifa-logo-canvas {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -18% -10%;
+  z-index: 3;
+  width: 120%;
+  height: 136%;
   overflow: visible;
-}
-
-.sahifa-logo-canvas {
-  z-index: 2;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 180ms ease-out;
+  transition: opacity 320ms ease-out;
 }
 
 .sahifa-logo-shell.is-active .sahifa-logo-canvas {
   opacity: 1;
 }
 
-.sahifa-logo-art {
-  z-index: 1;
-}
-
-.sahifa-flow-art {
+.sahifa-logo-shell.is-stopping .sahifa-logo-canvas {
   opacity: 0;
-  pointer-events: none;
-}
-
-.sahifa-logo-shell.is-active .sahifa-flow-art {
-  opacity: 1;
-}
-
-@keyframes sahifa-bounce {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-2px) rotate(-0.5deg);
-  }
-}
-
-@keyframes sahifa-splash {
-  0% {
-    stroke-dashoffset: 200;
-    opacity: 0;
-  }
-  25%,
-  80% {
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes sahifa-ribbon {
-  0% {
-    stroke-dashoffset: 420;
-    opacity: 0;
-  }
-  18%,
-  82% {
-    opacity: 0.95;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes sahifa-page-1 {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-  22% { opacity: 1; }
-  100% { transform: translate(-15px, -31px) rotate(-28deg); opacity: 0; }
-}
-
-@keyframes sahifa-page-2 {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translate(2px, -37px) rotate(30deg); opacity: 0; }
-}
-
-@keyframes sahifa-page-3 {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-  24% { opacity: 1; }
-  100% { transform: translate(15px, -27px) rotate(26deg); opacity: 0; }
-}
-
-@keyframes sahifa-sparks {
-  0%, 15% { transform: scale(0.2); opacity: 0; }
-  40% { opacity: 1; }
-  100% { transform: scale(1.25); opacity: 0; }
-}
-
-.sahifa-hover-art {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.group:hover .sahifa-hover-art,
-.group:focus-visible .sahifa-hover-art {
-  opacity: 1;
-}
-
-.group:hover g[filter="url(#sahifa-shadow)"],
-.group:focus-visible g[filter="url(#sahifa-shadow)"] {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sahifa-bounce 1.8s ease-in-out infinite;
-}
-
-.group:hover .sahifa-splash,
-.group:focus-visible .sahifa-splash {
-  stroke-dasharray: 80 120;
-  animation: sahifa-splash 1.8s ease-out infinite;
-}
-
-.group:hover .sahifa-ribbon,
-.group:focus-visible .sahifa-ribbon {
-  stroke-dasharray: 420;
-  animation: sahifa-ribbon 2.2s ease-out infinite;
-}
-
-.group:hover .sahifa-ribbon-blue,
-.group:focus-visible .sahifa-ribbon-blue {
-  animation-delay: 0.28s;
-}
-
-.group:hover .sahifa-pages path,
-.group:focus-visible .sahifa-pages path {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.group:hover .sahifa-pages path:nth-child(1),
-.group:focus-visible .sahifa-pages path:nth-child(1) { animation: sahifa-page-1 2.4s ease-out infinite; }
-.group:hover .sahifa-pages path:nth-child(2),
-.group:focus-visible .sahifa-pages path:nth-child(2) { animation: sahifa-page-2 2.6s 0.18s ease-out infinite; }
-.group:hover .sahifa-pages path:nth-child(3),
-.group:focus-visible .sahifa-pages path:nth-child(3) { animation: sahifa-page-3 2.35s 0.36s ease-out infinite; }
-.group:hover .sahifa-pages path:nth-child(4),
-.group:focus-visible .sahifa-pages path:nth-child(4) { animation: sahifa-page-1 2.5s 0.12s ease-out infinite; }
-.group:hover .sahifa-pages path:nth-child(5),
-.group:focus-visible .sahifa-pages path:nth-child(5) { animation: sahifa-page-2 2.45s 0.4s ease-out infinite; }
-.group:hover .sahifa-pages path:nth-child(6),
-.group:focus-visible .sahifa-pages path:nth-child(6) { animation: sahifa-page-3 2.7s 0.26s ease-out infinite; }
-
-.group:hover .sahifa-sparks,
-.group:focus-visible .sahifa-sparks {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sahifa-sparks 1.45s ease-out infinite;
+  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .group:hover .sahifa-hover-art,
-  .group:focus-visible .sahifa-hover-art,
-  .group:hover g[filter="url(#sahifa-shadow)"],
-  .group:focus-visible g[filter="url(#sahifa-shadow)"] {
+  .sahifa-logo-shell.is-active .sahifa-logo-canvas {
     animation: none;
   }
-
-  .sahifa-logo-shell.is-active .sahifa-flow-art,
-  .sahifa-logo-shell.is-active .sahifa-logo-canvas,
-  .sahifa-logo-shell.is-active .sahifa-letter-wave,
-  .sahifa-logo-shell.is-active .sahifa-rosette {
-    animation: none;
-  }
-}
-
-.sahifa-logo-shell.is-active .sahifa-letter {
-  transform-box: fill-box;
-  transform-origin: center bottom;
-  animation: sahifa-letter-wave 1.8s ease-in-out infinite;
-}
-
-.sahifa-logo-shell.is-active .sahifa-letter-2 { animation-delay: 60ms; }
-.sahifa-logo-shell.is-active .sahifa-letter-3 { animation-delay: 120ms; }
-.sahifa-logo-shell.is-active .sahifa-letter-4 { animation-delay: 180ms; }
-.sahifa-logo-shell.is-active .sahifa-letter-5 { animation-delay: 240ms; }
-.sahifa-logo-shell.is-active .sahifa-letter-6 { animation-delay: 300ms; }
-
-@keyframes sahifa-letter-wave {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  35% { transform: translateY(-2px) rotate(-1.5deg); }
-  68% { transform: translateY(1px) rotate(1.5deg); }
-}
-
-.sahifa-logo-shell.is-active .sahifa-splash-arc {
-  stroke-dasharray: 44 92;
-  animation: sahifa-splash-arc 1.25s ease-out infinite;
-}
-
-.sahifa-logo-shell.is-active .sahifa-splash-highlight {
-  stroke-dasharray: 18 48;
-  animation: sahifa-splash-highlight 1.25s ease-out infinite;
-}
-
-@keyframes sahifa-splash-arc {
-  0% { stroke-dashoffset: 140; opacity: 0; }
-  18% { opacity: 1; }
-  62% { opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
-}
-
-@keyframes sahifa-splash-highlight {
-  0% { stroke-dashoffset: 65; opacity: 0; }
-  25% { opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
-}
-
-.sahifa-logo-shell.is-active .sahifa-ribbon {
-  stroke-dasharray: 120 220;
-  animation: sahifa-ribbon-flow 2s linear infinite;
-}
-
-.sahifa-logo-shell.is-active .sahifa-ribbon-blue {
-  animation-delay: 320ms;
-}
-
-@keyframes sahifa-ribbon-flow {
-  0% { stroke-dashoffset: 340; opacity: 0; }
-  14% { opacity: .98; }
-  82% { opacity: .98; }
-  100% { stroke-dashoffset: -340; opacity: 0; }
-}
-
-.sahifa-logo-shell.is-active .sahifa-rosette {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sahifa-rosette-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes sahifa-rosette-pulse {
-  0%, 100% { transform: translate(187px, 7px) rotate(0deg) scale(1); }
-  50% { transform: translate(187px, 7px) rotate(22deg) scale(1.12); }
-}
-
-.sahifa-logo-shell.is-active .sahifa-burst-lines {
-  animation: sahifa-burst 1.5s ease-out infinite;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-@keyframes sahifa-burst {
-  0%, 10% { opacity: 0; transform: scale(.3); }
-  42% { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.2); }
 }
 
 @media (max-width: 640px) {
-  .sahifa-logo-shell { width: 224px; height: 64px; }
+  .sahifa-logo-shell {
+    width: 156px;
+    height: 44px;
+  }
 }

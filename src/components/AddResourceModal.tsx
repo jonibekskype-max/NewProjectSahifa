@@ -6,7 +6,7 @@ import { CATEGORIES } from "../constants";
 interface AddResourceModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (r: Omit<Resource, "id" | "createdAt" | "addedBy">) => void;
+  onAdd: (r: Omit<Resource, "id" | "createdAt" | "addedBy" | "downloads">) => void;
 }
 
 export function AddResourceModal({ open, onClose, onAdd }: AddResourceModalProps) {

@@ -29,11 +29,11 @@ export function Header({ user, onLogin, onLogout, onAddClick, onFeedbackClick, o
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-1.5 sm:px-6">
         <a
           href="/"
           aria-label="Sahifa bosh sahifasi"
-          className="group -ml-6 px-6 py-4"
+          className="group -ml-3 px-3 py-1"
         >
           <SahifaLogo />
         </a>
@@ -41,20 +41,20 @@ export function Header({ user, onLogin, onLogout, onAddClick, onFeedbackClick, o
         <div className="flex items-center gap-2">
           <button
             onClick={onFeedbackClick}
-            className="hidden items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-sm font-medium text-emerald-800 transition hover:bg-emerald-100 sm:flex"
+            className="hidden items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-800 transition hover:bg-emerald-100 sm:flex sm:text-sm"
           >
-            <MessageSquare className="h-4 w-4" /> Feedback / Shikoyat
+            <MessageSquare className="h-4 w-4" /> Fikr / Shikoyat
           </button>
           <button
             onClick={onAddClick}
-            className="hidden items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 sm:flex"
+            className="hidden items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-emerald-700 sm:flex sm:text-sm"
           >
-            <span className="text-lg leading-none">+</span> Material qo'shish
+            <span className="text-base leading-none">+</span> Material qo'shish
           </button>
           <button
             onClick={onFeedbackClick}
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 transition hover:bg-emerald-100 sm:hidden"
-            aria-label="Feedback yoki shikoyat yuborish"
+            aria-label="Fikr yoki shikoyat yuborish"
           >
             <MessageSquare className="h-4 w-4" />
           </button>

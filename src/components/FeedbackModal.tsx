@@ -48,12 +48,12 @@ export function FeedbackModal({ open, onClose, onSubmit }: FeedbackModalProps) {
             <div className="flex items-start gap-3 pr-8">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700"><MessageSquare className="h-5 w-5" /></div>
               <div>
-                <h2 className="text-xl font-bold text-slate-800">Feedback / Shikoyat</h2>
+                <h2 className="text-xl font-bold text-slate-800">Fikr / Shikoyat</h2>
                 <p className="mt-1 text-sm leading-relaxed text-slate-500">Fikringiz, taklifingiz yoki muammo haqida yozing.</p>
               </div>
             </div>
             <div className="mt-5 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm leading-relaxed text-emerald-900">
-              Xabaringiz to'g'ridan-to'g'ri sayt administratorlariga yuboriladi: <strong>@jonibeksamps</strong> (Jonibek) va <strong>NorqulovSohibjon</strong> (Sohibjon).
+              Xabaringiz to'g'ridan-to'g'ri sayt administratorlariga yuboriladi: <strong>@jonibeksamps</strong> (Jonibek) va <strong>@NorqulovSohibjon</strong> (Sohibjon).
             </div>
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <label className="block text-sm font-medium text-slate-700">Ismingiz<input required value={name} onChange={(event) => setName(event.target.value)} className="mt-1.5 w-full rounded-lg border border-slate-200 px-3.5 py-2.5 font-normal outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" placeholder="Ismingizni kiriting" /></label>
